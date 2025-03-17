@@ -1,0 +1,10 @@
+/* Estilos básicos */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  /* Clases de utilidad */
+  .header { box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .sidebar { box-shadow: 2px 0 5px rgba(0,0,0,0.05); }
+  .footer { border-top: 1px solid #e5e5e5; }

@@ -1,75 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import flower2 from '../../public/flower2.png';
 import logoImg from '../../public/logo.jpg';
+import flower2 from '../../public/flower2.png';
+import LoginForm from './Components/LoginForm';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Login data:', formData);
-    // Aquí iría la lógica de autenticación
-  };
-
   return (
-    <div className="page-container login-page">
-      <div className="two-column-layout">
-        <div className="column image-column">
-          <img src={flower2} alt="Orquídea púrpura" />
+    <div className="min-h-screen flex flex-col md:flex-row">
+      {/* Left side image - wrapper con tamaño reducido */}
+      <div className="hidden md:flex md:w-1/2 relative items-center justify-center">
+        <div className="w-3/4 h-3/4"> {/* Contenedor más pequeño para la imagen */}
+          <img 
+            src={flower2}
+            alt="Flor" 
+            className="w-full h-full object-contain rounded-lg shadow-md" 
+          />
         </div>
-        
-        <div className="column content-column">
-          <div className="logo">
-            <img src={logoImg} alt="BLOSSOMIA" />
+      </div>
+      
+      {/* Right form */}
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-8">
+        <div className="w-full max-w-md">
+          <div className="flex justify-center mb-8">
+            <img src={logoImg} alt="BLOSSOMIA" className="h-16" />
           </div>
-
-          <div className="form-container">
-            <h2 className="form-title">Iniciar sesión</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <input
-                  type="email"
-                  className="form-input"
-                  placeholder="Ingresa tu correo"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="password"
-                  className="form-input"
-                  placeholder="Contraseña"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <button type="submit" className="btn">
-                  Iniciar sesión
-                </button>
-              </div>
-            </form>
-            <Link to="/register" className="account-link">
-              No tienes cuenta? Registrarte
-            </Link>
-          </div>
+          
+          <h2 className="text-2xl font-semibold text-center mb-8">Iniciar sesión</h2>
+          
+          <LoginForm />
         </div>
       </div>
     </div>

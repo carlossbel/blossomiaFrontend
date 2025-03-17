@@ -5,8 +5,12 @@ const InputField = ({
   placeholder, 
   value, 
   onChange, 
-  name 
+  name,
+  className = '', 
+  required = false
 }) => {
+  const baseStyles = "w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400";
+  
   return (
     <input
       type={type}
@@ -14,7 +18,8 @@ const InputField = ({
       value={value}
       onChange={onChange}
       name={name}
-      className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 mb-4"
+      className={`${baseStyles} ${className}`}
+      required={required}
     />
   );
 };

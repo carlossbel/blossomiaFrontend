@@ -2,8 +2,8 @@ import React from 'react';
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="min-h-screen w-full bg-white">
-      <div className="max-w-6xl mx-auto p-4">
+    <div className="min-h-screen w-full bg-white overflow-x-hidden">
+      <div className="w-full mx-auto">
         {children}
       </div>
     </div>
