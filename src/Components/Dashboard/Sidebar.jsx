@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { categoriaService } from '../../services/apiService';
 import { useNotification } from '../../contexts/NotificationContext';
 import Loader from '../UI/Loader';
+import IMAGES from '../../constants/images';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const navigate = useNavigate();
@@ -16,6 +17,20 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
+  // Mapeo de ID de categorías a imágenes
+  const categoriaImageMap = {
+    'interior': IMAGES.PLANTS.monstera[0],
+    'exterior': IMAGES.PLANTS.lavanda[0],
+    'cactus': IMAGES.PLANTS.cactus[0],
+    'aromaticas': IMAGES.PLANTS.lavanda[1],
+    'acuaticas': IMAGES.PLANTS.nenufar[0],
+    'tropicales': IMAGES.PLANTS.jardinTropical[0],
+    'ornamentales': IMAGES.PLANTS.orquideas[0],
+    'bonsais': IMAGES.PLANTS.pothos[0],
+    'huerto': IMAGES.PLANTS.suculentas[0],
+    'xerofitas': IMAGES.PLANTS.cactusEstrella[0]
+  };
+  
   // Cargar categorías desde el backend
   const fetchCategorias = useCallback(async () => {
     try {
@@ -25,8 +40,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       const response = await categoriaService.getCategorias();
       
       if (response && response.categorias) {
-        setCategorias(response.categorias);
-        console.log('Categorías cargadas:', response.categorias);
+        // Asignar imágenes a cada categoría según el mapeo
+        const categoriasConImagenes = response.categorias.map(categoria => ({
+          ...categoria,
+          imagen: categoriaImageMap[categoria.id] || IMAGES.FALLBACK
+        }));
+        
+        setCategorias(categoriasConImagenes);
+        console.log('Categorías cargadas:', categoriasConImagenes);
       } else {
         throw new Error('No se recibieron datos de categorías desde el servidor');
       }
@@ -35,73 +56,75 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       setError(error.message || 'Error al cargar las categorías');
       showError('Error al cargar las categorías');
       
-      // Usar datos de respaldo en caso de error
+      // Usar datos de respaldo en caso de error con las imágenes mapeadas
       setCategorias([
         { 
           id: 'interior', 
           nombre: 'Plantas de Interior', 
           descripcion: 'Perfectas para decorar tu hogar',
-          imagen: 'https://images.unsplash.com/photo-1463320726281-696a485928c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['interior']
         },
         { 
           id: 'exterior', 
           nombre: 'Plantas de Exterior', 
           descripcion: 'Resistentes y decorativas',
-          imagen: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['exterior']
         },
         { 
           id: 'cactus', 
           nombre: 'Cactus y Suculentas', 
           descripcion: 'Ideales para principiantes',
-          imagen: 'https://images.unsplash.com/photo-1509423350716-97f9360b4e09?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['cactus']
         },
         { 
           id: 'aromaticas', 
           nombre: 'Plantas Aromáticas', 
           descripcion: 'Hierbas para tu cocina',
-          imagen: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['aromaticas']
         },
         { 
           id: 'acuaticas', 
           nombre: 'Plantas Acuáticas', 
           descripcion: 'Para estanques y fuentes',
-          imagen: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['acuaticas']
         },
         { 
           id: 'tropicales', 
           nombre: 'Plantas Tropicales', 
           descripcion: 'Exóticas y llamativas',
-          imagen: 'https://images.unsplash.com/photo-1572969036142-ef8de30f5b09?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['tropicales']
         },
         { 
           id: 'ornamentales', 
           nombre: 'Flores Ornamentales', 
           descripcion: 'Coloridas y decorativas',
-          imagen: 'https://images.unsplash.com/photo-1599593892345-65ca6c7b62c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['ornamentales']
         },
         { 
           id: 'bonsais', 
           nombre: 'Bonsáis', 
           descripcion: 'El arte de la miniatura',
-          imagen: 'https://images.unsplash.com/photo-1611844085880-e901d5b6b146?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['bonsais']
         },
         { 
           id: 'huerto', 
           nombre: 'Huerto Urbano', 
           descripcion: 'Cultiva tus propios alimentos',
-          imagen: 'https://images.unsplash.com/photo-1595855341503-4e5f82488917?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['huerto']
         },
         { 
           id: 'xerofitas', 
           nombre: 'Xerofitas', 
           descripcion: 'Plantas de bajo consumo de agua',
-          imagen: 'https://images.unsplash.com/photo-1572902505249-11fe8581d83c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['xerofitas']
         }
       ]);
     } finally {
       setLoading(false);
     }
   }, [showError]);
+  
+  // El resto del componente permanece igual...
   
   // Cargar categorías cuando se monte el componente
   useEffect(() => {
