@@ -29,19 +29,19 @@ const RegisterForm = () => {
     {
       name: 'Google Authenticator',
       description: 'Aplicación de Google para generar códigos de verificación.',
-      icon: '🔐',
+      icon: 'G',
       link: 'https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2'
     },
     {
       name: 'Microsoft Authenticator',
       description: 'App de Microsoft para autenticación de dos factores.',
-      icon: '🔒',
+      icon: 'M',
       link: 'https://www.microsoft.com/en-us/security/mobile-authenticator-app'
     },
     {
       name: 'Authy',
       description: 'Solución multiplataforma para autenticación 2FA.',
-      icon: '🛡️',
+      icon: 'A',
       link: 'https://authy.com/download/'
     }
   ];
@@ -141,7 +141,7 @@ const RegisterForm = () => {
             <div className="space-y-3">
               {authApps.map((app, index) => (
                 <div key={index} className="flex items-start">
-                  <div className="text-xl mr-2">{app.icon}</div>
+                  <div className="font-bold w-8 h-8 flex items-center justify-center bg-blue-100 rounded-full text-blue-700 mr-2">{app.icon}</div>
                   <div>
                     <a 
                       href={app.link} 
@@ -300,8 +300,8 @@ const RegisterForm = () => {
             <div className="flex items-center space-x-2">
               {authApps.map((app, index) => (
                 <div key={index} className="text-center">
-                  <span className="text-xl">{app.icon}</span>
-                  <p className="text-xs">{app.name}</p>
+                  <span className="inline-block w-6 h-6 bg-blue-100 rounded-full text-blue-700 font-medium flex items-center justify-center">{app.icon}</span>
+                  <p className="text-xs mt-1">{app.name}</p>
                 </div>
               ))}
             </div>
