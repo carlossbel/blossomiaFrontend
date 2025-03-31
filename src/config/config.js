@@ -4,7 +4,7 @@
 export const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
 
 // URL base para la API
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://blossomiabackend.onrender.com/api';
 
 // Configuración de la API
 export const API_CONFIG = {
@@ -18,11 +18,12 @@ export const APP_CONFIG = {
   NAME: 'Blossomia',
   VERSION: '1.0.0',
   DESCRIPTION: 'Plataforma para el cuidado de plantas y jardinería',
-  SUPPORT_EMAIL: 'carlossbel09@gmail.com'
+  SUPPORT_EMAIL: 'carlossbel09@gmail.com',
+  APP_URL: 'https://blossomia-frontend.vercel.app'
 };
 
 export const WEBSOCKET_CONFIG = {
-  URL: process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000',
+  URL: process.env.REACT_APP_SOCKET_URL || 'https://blossomiabackend.onrender.com',
   RECONNECTION_ATTEMPTS: 5,
   RECONNECTION_DELAY: 1000
 };
@@ -41,7 +42,7 @@ export const API_ROUTES = {
     LOGIN: '/auth/login',
     VERIFY_MFA: '/auth/verify-mfa',
     FORGOT_PASSWORD: '/auth/forgot-password',
-    VERIFY_RESET_CODE: '/auth/verify-reset-code', // AÑADIDA esta ruta
+    VERIFY_RESET_CODE: '/auth/verify-reset-code',
     RESET_PASSWORD: '/auth/reset-password'
   },
   USER: {

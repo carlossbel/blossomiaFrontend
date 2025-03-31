@@ -6,7 +6,34 @@ import { categoriaService } from '../../services/apiService';
 import { useNotification } from '../../contexts/NotificationContext';
 import Loader from '../../Components/UI/Loader';
 import Button from '../../Components/UI/Button';
-import IMAGES from '../../constants/images';
+
+// Importar imágenes directamente
+import monsteraImg from '../../public/m1.jpg';
+import monstera2Img from '../../public/m2.jpg';
+import monstera3Img from '../../public/m3.jpg';
+import lavandaImg from '../../public/l1.jpg';
+import lavanda2Img from '../../public/l2.jpg';
+import lavanda3Img from '../../public/l3.jpg';
+import cactusImg from '../../public/c.jpg';
+import cactus1Img from '../../public/c1.jpg';
+import cactus2Img from '../../public/c2.jpg';
+import cactusEstrellaImg from '../../public/ce.jpeg';
+import cactusEstrella1Img from '../../public/ce1.jpg';
+import nenufarImg from '../../public/n.jpg';
+import nenufar1Img from '../../public/n1.jpg';
+import nenufar2Img from '../../public/n2.jpeg';
+import orquideaImg from '../../public/o1.jpeg';
+import orquidea1Img from '../../public/o2.jpg';
+import orquidea2Img from '../../public/o3.jpg';
+import flower1Img from '../../public/flower1.png';
+import flower2Img from '../../public/flower2.png';
+import flower3Img from '../../public/flower3.png';
+import flower4Img from '../../public/flower4.jpg';
+import flower5Img from '../../public/flower5.png';
+import pothosImg from '../../public/p.jpg';
+import pothos1Img from '../../public/p1.jpg';
+import s1Img from '../../public/s1.jpg';
+import s2Img from '../../public/s2.jpg';
 
 const PlantaDetalle = () => {
   const { plantaId, categoriaId } = useParams();
@@ -17,6 +44,97 @@ const PlantaDetalle = () => {
   const [loading, setLoading] = useState(true);
   const [imagenActiva, setImagenActiva] = useState(0);
   const [showAllCuidados, setShowAllCuidados] = useState(false);
+  
+  // Mapeo de ID de plantas a colecciones de imágenes
+  const plantaImageMap = {
+    // Monstera y variantes
+    'monstera': [monsteraImg, monstera2Img, monstera3Img],
+    'monstera-deliciosa': [monsteraImg, monstera2Img, monstera3Img],
+    'monstera-variegada': [monsteraImg, monstera2Img, monstera3Img],
+    'monstera-adansonii': [monsteraImg, monstera2Img, monstera3Img],
+    
+    // Lavanda y plantas aromáticas
+    'lavanda': [lavandaImg, lavanda2Img, lavanda3Img],
+    'lavandula': [lavandaImg, lavanda2Img, lavanda3Img],
+    'aromatica': [lavanda2Img, lavanda3Img, lavandaImg],
+    'menta': [lavanda3Img, lavanda2Img, lavandaImg],
+    'romero': [lavanda2Img, lavanda3Img, lavandaImg],
+    
+    // Cactus y suculentas
+    'cactus': [cactusImg, cactus1Img, cactus2Img],
+    'cactus-espinoso': [cactus1Img, cactusImg, cactus2Img],
+    'cactus-san-pedro': [cactus2Img, cactusImg, cactus1Img],
+    'cactus-estrella': [cactusEstrellaImg, cactusEstrella1Img, cactusImg],
+    'cactus-globo': [cactusEstrella1Img, cactusEstrellaImg, cactusImg],
+    
+    // Plantas acuáticas
+    'nenufar': [nenufarImg, nenufar1Img, nenufar2Img],
+    'loto': [nenufar1Img, nenufarImg, nenufar2Img],
+    'acuatica': [nenufar2Img, nenufarImg, nenufar1Img],
+    
+    // Orquídeas y ornamentales
+    'orquidea': [orquideaImg, orquidea1Img, orquidea2Img],
+    'phalaenopsis': [orquidea1Img, orquideaImg, orquidea2Img],
+    'orquidea-vanda': [orquidea2Img, orquideaImg, orquidea1Img],
+    
+    // Pothos y trepadoras
+    'pothos': [pothosImg, pothos1Img, flower1Img],
+    'pothos-variegado': [pothos1Img, pothosImg, flower1Img],
+    'filodendro': [pothos1Img, pothosImg, flower1Img],
+
+    // Suculentas
+    'suculenta': [s1Img, s2Img, cactusImg],
+    'echeveria': [s2Img, s1Img, cactusImg],
+    'sedum': [s1Img, s2Img, cactusImg]
+  };
+  
+  // Mapeo por categoría (como fallback)
+  const categoriaImageMap = {
+    'interior': [monsteraImg, monstera2Img, flower1Img],
+    'exterior': [lavandaImg, lavanda3Img, flower2Img],
+    'cactus': [cactusImg, cactus1Img, cactus2Img],
+    'aromaticas': [lavandaImg, lavanda2Img, flower4Img],
+    'acuaticas': [nenufarImg, nenufar1Img, nenufar2Img],
+    'tropicales': [flower3Img, monsteraImg, monstera2Img],
+    'ornamentales': [orquideaImg, orquidea1Img, orquidea2Img],
+    'bonsais': [pothosImg, pothos1Img, flower1Img],
+    'huerto': [flower5Img, lavanda2Img, flower2Img],
+    'xerofitas': [cactusEstrellaImg, cactusEstrella1Img, cactusImg]
+  };
+  
+  // Icono de respaldo
+  const fallbackIcon = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>';
+
+  // Función para buscar las mejores imágenes para una planta
+  const getBestImagesForPlant = (planta) => {
+    // Primero verificar por ID
+    const plantaId = planta.id.toLowerCase();
+    
+    // Buscar coincidencias exactas o parciales en el ID
+    for (const [key, images] of Object.entries(plantaImageMap)) {
+      if (plantaId === key || plantaId.includes(key)) {
+        return images;
+      }
+    }
+    
+    // Si no se encuentra por ID, buscar en el nombre
+    if (planta.nombre) {
+      const nombre = planta.nombre.toLowerCase();
+      for (const [key, images] of Object.entries(plantaImageMap)) {
+        if (nombre.includes(key)) {
+          return images;
+        }
+      }
+    }
+    
+    // Si aún no hay coincidencia, usar las imágenes de la categoría
+    if (categoriaId && categoriaImageMap[categoriaId]) {
+      return categoriaImageMap[categoriaId];
+    }
+    
+    // Si todo falla, usar un conjunto de imágenes por defecto
+    return [flower1Img, flower2Img, flower3Img];
+  };
 
   useEffect(() => {
     const fetchPlantaDetalle = async () => {
@@ -25,7 +143,16 @@ const PlantaDetalle = () => {
         const response = await categoriaService.getPlantaDetalle(plantaId);
         
         if (response && response.planta) {
-          setPlanta(response.planta);
+          // Si la planta no tiene imágenes o son URLs externas, asignar imágenes locales
+          let plantaData = response.planta;
+          
+          // Asignar colección de imágenes a la planta
+          plantaData = {
+            ...plantaData,
+            imagenes: getBestImagesForPlant(plantaData)
+          };
+          
+          setPlanta(plantaData);
         } else {
           throw new Error('No se encontraron datos de la planta');
         }
@@ -40,7 +167,7 @@ const PlantaDetalle = () => {
     if (plantaId) {
       fetchPlantaDetalle();
     }
-  }, [plantaId, showError]);
+  }, [plantaId, categoriaId, showError]);
 
   const handleGoBack = () => {
     navigate(`/categoria/${categoriaId}`);
@@ -78,6 +205,7 @@ const PlantaDetalle = () => {
     );
   }
 
+  // Usar las imágenes cargadas o las que vienen de la API
   const imagenes = planta.imagenes || [planta.imagen];
 
   return (
@@ -105,7 +233,7 @@ const PlantaDetalle = () => {
                 className="w-full h-full object-contain"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = IMAGES.FALLBACK;
+                  e.target.src = fallbackIcon;
                 }}
               />
             </div>
@@ -127,7 +255,7 @@ const PlantaDetalle = () => {
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = IMAGES.FALLBACK;
+                        e.target.src = fallbackIcon;
                       }}
                     />
                   </button>

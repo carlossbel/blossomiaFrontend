@@ -6,6 +6,20 @@ import { categoriaService } from '../../services/apiService';
 import { useNotification } from '../../contexts/NotificationContext';
 import Loader from '../UI/Loader';
 
+// Importar imágenes directamente
+import monsteraImg from '../../public/m1.jpg';
+import cactusImg from '../../public/c.jpg';
+import cactusEstrellaImg from '../../public/ce.jpeg';
+import lavandaImg from '../../public/l1.jpg';
+import nenufarImg from '../../public/n.jpg';
+import orquideaImg from '../../public/o1.jpeg';
+import pothosImg from '../../public/p.jpg';
+import flower1Img from '../../public/flower1.png';
+import flower2Img from '../../public/flower2.png';
+import flower3Img from '../../public/flower3.png';
+import flower4Img from '../../public/flower4.jpg';
+import flower5Img from '../../public/flower5.png';
+
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -15,6 +29,20 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Mapeo de ID de categorías a imágenes
+  const categoriaImageMap = {
+    'interior': flower1Img,
+    'exterior': flower2Img,
+    'cactus': cactusImg,
+    'aromaticas': flower4Img,
+    'acuaticas': flower5Img,
+    'tropicales': flower3Img,
+    'ornamentales': orquideaImg,
+    'bonsais': flower1Img,
+    'huerto': flower5Img,
+    'xerofitas': cactusEstrellaImg
+  };
   
   // Cargar categorías desde el backend
   const fetchCategorias = useCallback(async () => {
@@ -41,61 +69,61 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           id: 'interior', 
           nombre: 'Plantas de Interior', 
           descripcion: 'Perfectas para decorar tu hogar',
-          imagen: 'https://images.unsplash.com/photo-1463320726281-696a485928c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['interior'] // Usar imagen local
         },
         { 
           id: 'exterior', 
           nombre: 'Plantas de Exterior', 
           descripcion: 'Resistentes y decorativas',
-          imagen: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['exterior'] // Usar imagen local
         },
         { 
           id: 'cactus', 
           nombre: 'Cactus y Suculentas', 
           descripcion: 'Ideales para principiantes',
-          imagen: 'https://images.unsplash.com/photo-1509423350716-97f9360b4e09?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['cactus'] // Usar imagen local
         },
         { 
           id: 'aromaticas', 
           nombre: 'Plantas Aromáticas', 
           descripcion: 'Hierbas para tu cocina',
-          imagen: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['aromaticas'] // Usar imagen local
         },
         { 
           id: 'acuaticas', 
           nombre: 'Plantas Acuáticas', 
           descripcion: 'Para estanques y fuentes',
-          imagen: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['acuaticas'] // Usar imagen local
         },
         { 
           id: 'tropicales', 
           nombre: 'Plantas Tropicales', 
           descripcion: 'Exóticas y llamativas',
-          imagen: 'https://images.unsplash.com/photo-1572969036142-ef8de30f5b09?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['tropicales'] // Usar imagen local
         },
         { 
           id: 'ornamentales', 
           nombre: 'Flores Ornamentales', 
           descripcion: 'Coloridas y decorativas',
-          imagen: 'https://images.unsplash.com/photo-1599593892345-65ca6c7b62c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['ornamentales'] // Usar imagen local
         },
         { 
           id: 'bonsais', 
           nombre: 'Bonsáis', 
           descripcion: 'El arte de la miniatura',
-          imagen: 'https://images.unsplash.com/photo-1611844085880-e901d5b6b146?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['bonsais'] // Usar imagen local
         },
         { 
           id: 'huerto', 
           nombre: 'Huerto Urbano', 
           descripcion: 'Cultiva tus propios alimentos',
-          imagen: 'https://images.unsplash.com/photo-1595855341503-4e5f82488917?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['huerto'] // Usar imagen local
         },
         { 
           id: 'xerofitas', 
           nombre: 'Xerofitas', 
           descripcion: 'Plantas de bajo consumo de agua',
-          imagen: 'https://images.unsplash.com/photo-1572902505249-11fe8581d83c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+          imagen: categoriaImageMap['xerofitas'] // Usar imagen local
         }
       ]);
     } finally {
@@ -122,6 +150,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
            location.pathname.startsWith(`/categoria/${categoriaId}/planta/`);
   };
   
+  // Obtener imagen para una categoría (ya sea de la API o del mapeo local)
+  const getCategoriaImagen = (categoria) => {
+    // Si la categoría ya tiene una imagen válida, usarla
+    if (categoria.imagen && !categoria.imagen.includes('unsplash.com')) {
+      return categoria.imagen;
+    }
+    
+    // Si no, usar la imagen del mapeo local
+    return categoriaImageMap[categoria.id] || flower1Img; // Imagen por defecto
+  };
+  
   // Consejo del día aleatorio
   const consejos = [
     "La mayoría de las plantas de interior necesitan luz indirecta y un riego moderado.",
@@ -137,6 +176,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   ];
   
   const consejoAleatorio = consejos[Math.floor(Math.random() * consejos.length)];
+
+  // Icono de respaldo en caso de que la imagen no cargue
+  const fallbackIcon = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>';
 
   return (
     <>
@@ -203,12 +245,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                   >
                     <div className="w-12 h-12 mr-3 flex-shrink-0 rounded-md overflow-hidden">
                       <img 
-                        src={categoria.imagen} 
+                        src={getCategoriaImagen(categoria)} 
                         alt="" 
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>';
+                          e.target.src = fallbackIcon;
                         }}
                       />
                     </div>
