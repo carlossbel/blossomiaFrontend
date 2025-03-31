@@ -1,13 +1,22 @@
 import React from 'react';
 import DashboardLayout from '../../Layouts/DashboardLayout';
+import { useNotification } from '../../contexts/NotificationContext';
+
+// Importar las imágenes originales
+import flower1 from '../../public/flower1.png';
+import flower2 from '../../public/flower2.png';
+import flower3 from '../../public/flower3.png';
 
 const Home = () => {
+  const { showSuccess } = useNotification();
+
   // Datos de ejemplo para plantas destacadas
   const plantasDestacadas = [
     {
       id: 1,
       nombre: 'Monstera Deliciosa',
       emoji: '🌿',
+      imagen: flower1, // Usar la imagen original
       descripcion: 'Conocida por sus hojas grandes y perforadas, esta planta tropical es perfecta para interiores luminosos.',
       cuidados: 'Riego: Moderado, cada 7-10 días. Luz: Indirecta brillante. Dificultad: Baja.'
     },
@@ -15,6 +24,7 @@ const Home = () => {
       id: 2,
       nombre: 'Lavanda',
       emoji: '💜',
+      imagen: flower2, // Usar la imagen original
       descripcion: 'Planta aromática con hermosas flores moradas, ideal para jardines y balcones soleados.',
       cuidados: 'Riego: Escaso, tolera sequía. Luz: Sol directo. Dificultad: Media.'
     }
@@ -26,47 +36,64 @@ const Home = () => {
     texto: "Es mejor regar abundantemente y con menos frecuencia. Esto estimula a las raíces a crecer más profundamente, lo que hace que las plantas sean más resistentes."
   };
 
-  // Datos para la galería de imágenes - usando imágenes de plantas de Unsplash
+  // Datos para la galería de imágenes
   const imagenesGaleria = [
     {
       id: 1,
-      url: "https://images.unsplash.com/photo-1470058869958-2a77ade41c02?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      url: flower1,
       titulo: "Jardín tropical"
     },
     {
       id: 2,
-      url: "https://images.unsplash.com/photo-1462530260150-162092b860e5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      url: flower2,
       titulo: "Orquídeas"
     },
     {
       id: 3,
-      url: "https://images.unsplash.com/photo-1525498128493-380d1990a112?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      url: flower3,
       titulo: "Cactus"
     },
     {
       id: 4,
-      url: "https://images.unsplash.com/photo-1629761442974-b87c1ef7772b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      url: flower1,
       titulo: "Monstera"
     },
     {
       id: 5,
-      url: "https://images.unsplash.com/photo-1599685315640-4a9faea1f09c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      url: flower2,
       titulo: "Suculentas"
     }
   ];
+
+  // Función para mostrar una notificación cuando se haga clic en una planta
+  const handlePlantaClick = (nombre) => {
+    showSuccess(`Has seleccionado ${nombre}`);
+  };
 
   return (
     <DashboardLayout>
       {/* Primera fila con dos plantas destacadas */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {plantasDestacadas.map(planta => (
-          <div key={planta.id} className="bg-white p-5 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-start">
-              <div className="w-16 h-16 bg-gray-100 mr-4 flex items-center justify-center rounded-md text-2xl">
-                {planta.emoji}
+          <div 
+            key={planta.id} 
+            className="bg-white p-5 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+            onClick={() => handlePlantaClick(planta.nombre)}
+          >
+            <div className="flex flex-col sm:flex-row items-start">
+              <div className="w-full sm:w-1/3 mb-4 sm:mb-0 sm:mr-4">
+                <img 
+                  src={planta.imagen} 
+                  alt={planta.nombre}
+                  className="w-full h-32 object-cover rounded-md"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>';
+                  }}
+                />
               </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-2">{planta.nombre}</h3>
+              <div className="w-full sm:w-2/3">
+                <h3 className="font-semibold text-lg mb-2">{planta.nombre} {planta.emoji}</h3>
                 <p className="text-gray-600 text-sm mb-2">
                   {planta.descripcion}
                 </p>
@@ -97,7 +124,7 @@ const Home = () => {
                         className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="192" height="160" viewBox="0 0 24 24" fill="none" stroke="%23859900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="M21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>';
+                          e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>';
                         }}
                       />
                     </div>

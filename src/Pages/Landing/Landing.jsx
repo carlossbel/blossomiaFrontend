@@ -1,10 +1,17 @@
+// src/Pages/Landing/Landing.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import MainLayout from '../../Layouts/MainLayout';
 import flower1 from '../../public/flower1.png';
 import logoImg from '../../public/logo.jpg';
 
 const Landing = () => {
+  const navigate = useNavigate();
+
+  const handleExplorarClick = () => {
+    navigate('/register');
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Navbar */}
@@ -48,10 +55,19 @@ const Landing = () => {
           </div>
           
           <div className="max-w-lg mx-auto">
-            <h1 className="text-4xl font-bold mb-4">Aprende mas sobre plantas</h1>
-            <p className="text-gray-600 mb-4">bla bla bla</p>
-            <p className="text-gray-700 mb-8">Descubre todo lo necesario y los cuidados para tus plantas</p>
-            <button className="bg-gray-700 text-white py-3 px-8 w-full font-medium hover:bg-gray-800 transition-colors">
+            <h1 className="text-4xl font-bold mb-4">Aprende más sobre plantas</h1>
+            <p className="text-gray-600 mb-4">
+              Descubre el mundo de la jardinería con nuestra comunidad de amantes de las plantas. 
+              Blossomia te guía desde la selección hasta el cuidado de tus especies favoritas.
+            </p>
+            <p className="text-gray-700 mb-8">
+              Encuentra información detallada sobre cuidados específicos, desde iluminación y riego 
+              hasta sustrato y fertilización para cada tipo de planta.
+            </p>
+            <button 
+              className="bg-gray-700 text-white py-3 px-8 w-full font-medium hover:bg-gray-800 transition-colors"
+              onClick={handleExplorarClick}
+            >
               Explorar
             </button>
           </div>

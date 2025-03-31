@@ -1,50 +1,42 @@
+// src/Layouts/DashboardLayout.jsx
 import React, { useState, useEffect } from 'react';
-import Header from '../Components/Dashboard/Header';
 import Sidebar from '../Components/Dashboard/Sidebar';
-import Footer from '../Components/Dashboard/Footer';
+import Header from '../Components/Dashboard/Header';
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
-  // Handle window resize to adjust sidebar visibility on large screens
+  // Verificar autenticación
   useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
+    if (!isAuthenticated()) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]);
 
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
+  // Función para alternar la visibilidad del sidebar
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+    setSidebarOpen(prevState => !prevState);
   };
 
-  // Determine if we should display the sidebar for large screens
-  const isLargeScreen = windowWidth >= 1024; // Tailwind's lg breakpoint
-
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
       <Header toggleSidebar={toggleSidebar} />
-      
-      <div className="flex flex-1 relative">
+
+      {/* Contenido principal */}
+      <div className="pt-16">
+        {/* Sidebar */}
         <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
         
-        <main 
-          className={`flex-1 transition-all duration-300 ease-in-out ${
-            isLargeScreen && sidebarOpen ? 'ml-64' : 'ml-0'
-          }`}
-        >
-          <div className="p-4 md:p-6">
-            {children}
-          </div>
+        {/* Contenido principal */}
+        <main className="p-6">
+          {children}
         </main>
       </div>
-      
-      <Footer />
     </div>
   );
 };
