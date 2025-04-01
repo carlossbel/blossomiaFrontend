@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../../Layouts/DashboardLayout';
 import { useNotification } from '../../contexts/NotificationContext';
 import PlantGallery from './components/PlantGallery';
 import PlantCareModal from './components/PlantCareModal';
+import PlantTipsWidget from '../../Components/PlantTips/PlantTipsWidget';
+import { usePlantTips } from '../../contexts/PlantTipsContext';
 import IMAGES from '../../constants/images';
 
 const Home = () => {
   const { showSuccess } = useNotification();
+  const { currentTip } = usePlantTips();
   const [selectedPlant, setSelectedPlant] = useState(null);
   const [showPlantCare, setShowPlantCare] = useState(false);
   const [showFullGallery, setShowFullGallery] = useState(false);
@@ -40,12 +43,6 @@ const Home = () => {
       ]
     }
   ];
-
-  // Consejo del día
-  const consejoDia = {
-    titulo: "Riego eficiente",
-    texto: "Es mejor regar abundantemente y con menos frecuencia. Esto estimula a las raíces a crecer más profundamente, lo que hace que las plantas sean más resistentes."
-  };
 
   // Datos para la galería de imágenes
   const imagenesGaleria = [
@@ -196,20 +193,8 @@ const Home = () => {
           )}
         </div>
 
-        <div className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
-          <h3 className="font-semibold text-lg mb-3 text-gray-800">Consejo del día</h3>
-          <h4 className="font-medium text-base mb-2 text-gray-700">{consejoDia.titulo}</h4>
-          <p className="text-gray-600 mb-4 text-sm">
-            {consejoDia.texto}
-          </p>
-          <div className="bg-green-50 p-4 rounded-md border border-green-100">
-            <h4 className="font-medium text-green-800 mb-2">¿Sabías que?</h4>
-            <p className="text-green-700 text-sm">
-              Las plantas no solo embellecen los espacios, también pueden mejorar la calidad del aire 
-              filtrando toxinas y produciendo oxígeno.
-            </p>
-          </div>
-        </div>
+        {/* Reemplazar el consejo estático con el widget dinámico */}
+        <PlantTipsWidget />
       </div>
 
       {/* Tercera fila - Temporada actual */}

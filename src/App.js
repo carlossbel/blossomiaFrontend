@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 // Proveedores de contexto
 import { AuthProvider } from './contexts/AuthContext';
 import { NotificationProvider } from './contexts/NotificationContext';
+import { PlantTipsProvider } from './contexts/PlantTipsContext';
 import ProtectedRoute from './Components/ProtectedRoute';
 
 // Páginas públicas
@@ -25,30 +26,32 @@ function App() {
   return (
     <AuthProvider>
       <NotificationProvider>
-        <Router>
-          <Routes>
-            {/* Rutas públicas */}
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
-            
-            {/* Rutas protegidas */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/dashboard" element={<Home />} />
-              <Route path="/contacto" element={<Contacto />} />
-              <Route path="/perfil" element={<Perfil />} />
+        <PlantTipsProvider>
+          <Router>
+            <Routes>
+              {/* Rutas públicas */}
+              <Route path="/" element={<Landing />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password/:token" element={<ResetPassword />} />
               
-              {/* Rutas de categorías y plantas */}
-              <Route path="/categoria/:categoriaId" element={<CategoriaPlantas />} />
-              <Route path="/categoria/:categoriaId/planta/:plantaId" element={<PlantaDetalle />} />
-            </Route>
-            
-            {/* Ruta para 404 - Redirige a la página principal */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Router>
+              {/* Rutas protegidas */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/dashboard" element={<Home />} />
+                <Route path="/contacto" element={<Contacto />} />
+                <Route path="/perfil" element={<Perfil />} />
+                
+                {/* Rutas de categorías y plantas */}
+                <Route path="/categoria/:categoriaId" element={<CategoriaPlantas />} />
+                <Route path="/categoria/:categoriaId/planta/:plantaId" element={<PlantaDetalle />} />
+              </Route>
+              
+              {/* Ruta para 404 - Redirige a la página principal */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Router>
+        </PlantTipsProvider>
       </NotificationProvider>
     </AuthProvider>
   );
