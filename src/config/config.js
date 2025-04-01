@@ -9,8 +9,8 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://blossomiabackend.
 // Configuración de la API
 export const API_CONFIG = {
   BASE_URL: API_BASE_URL,
-  TIMEOUT: 15000, // 15 segundos
-  RETRY_COUNT: 3  // Intentos de reintento en caso de error
+  TIMEOUT: 30000, // Cambiado de 15000 a 30000 (30 segundos)
+  RETRY_COUNT: 2  // Reducido de 3 a 2 intentos
 };
 
 // Configuración de la aplicación

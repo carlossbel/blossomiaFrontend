@@ -328,10 +328,22 @@ const contactService = {
   }
 };
 
+// Cache para categorías
+let categoriasCache = null;
+let cacheTiempoExpiracion = 0;
+const CACHE_DURACION = 5 * 60 * 1000; // 5 minutos
+
 // Servicios para categorías y plantas
 const categoriaService = {
   // Obtener todas las categorías
   getCategorias: async () => {
+    // Verificar si hay datos en caché válidos
+    const ahora = Date.now();
+    if (categoriasCache && ahora < cacheTiempoExpiracion) {
+      console.log('Usando categorías en caché');
+      return categoriasCache;
+    }
+    
     if (IS_DEVELOPMENT && false) { // Cambia a false para usar la API real en desarrollo
       // Simulación para desarrollo
       return new Promise((resolve) => {
@@ -359,8 +371,18 @@ const categoriaService = {
     
     try {
       const response = await apiClient.get(API_ROUTES.CATEGORIES.LIST);
+      
+      // Guardar en caché
+      categoriasCache = response.data;
+      cacheTiempoExpiracion = ahora + CACHE_DURACION;
+      
       return response.data;
     } catch (error) {
+      // Si hay un error de conexión pero tenemos caché (incluso vencida), usarla como respaldo
+      if ((!error.response || error.code === 'ECONNABORTED') && categoriasCache) {
+        console.log('Error de conexión. Usando caché antiguo como respaldo.');
+        return categoriasCache;
+      }
       throw error;
     }
   },
